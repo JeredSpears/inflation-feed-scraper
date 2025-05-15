@@ -70,7 +70,7 @@ def fetch_category_products(category_id, store_id, limit=5):
                 for price in context_prices:
                     if price.get("listPrice"):
                         flat_products.append({
-                            "id": record.get("id"),
+                            "productId": record.get("id"),
                             "skuId": sku.get("id"),
                             "displayName": record.get("displayName"),
                             "brand": (record.get("brand") or {}).get("name"),
