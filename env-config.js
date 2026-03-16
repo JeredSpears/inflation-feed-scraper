@@ -1,0 +1,1 @@
+export const HEB_SESSION_COOKIE = process.env.HEB_SESSION_COOKIE;

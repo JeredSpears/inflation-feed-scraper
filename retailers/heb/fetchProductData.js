@@ -1,3 +1,4 @@
+import { HEB_SESSION_COOKIE } from "../../env-config.js";
 import { sendRequest } from "../../lib/http.js";
 
 const GRAPHQL_URL = "https://www.heb.com/graphql";
@@ -5,7 +6,7 @@ const DEFAULT_HEADERS = {
   "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/113.0.0.0 Safari/537.36",
   "Accept-Language": "en-US,en;q=0.9",
   Connection: "close",
-  Cookie: "visid_incap_2302070=hlr9idE9QOKKJvtzYt7OFlXS0WgAAAAAQUIPAAAAAAAZXCtDMxcixmSdS91zlZ3G",
+  Cookie: HEB_SESSION_COOKIE ?? "",
 };
 
 const PRODUCT_DETAIL_QUERY = `

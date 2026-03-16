@@ -24,4 +24,5 @@ jobs:
           DO_SPACES_BUCKET: ${{ secrets.DO_SPACES_BUCKET }}
           DO_SPACES_REGION: ${{ secrets.DO_SPACES_REGION }}
           DO_SPACES_ENDPOINT: ${{ secrets.DO_SPACES_ENDPOINT }}
+          HEB_SESSION_COOKIE: ${{ secrets.HEB_SESSION_COOKIE }}
         run: node scraper.js
