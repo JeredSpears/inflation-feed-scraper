@@ -1,0 +1,23 @@
+{
+  "scrapedAt": "2026-03-15T21:08:06.581Z",
+  "recordCount": 1,
+  "prices": [
+    {
+      "retailer": "heb",
+      "productId": "539002",
+      "name": "Coca-Cola Soda Soft Drink Fridge Pack 12 pk Cans",
+      "brand": "Coca-Cola",
+      "price": "$8.42",
+      "unit": "each",
+      "unitPrice": "$0.06",
+      "isOnSale": false,
+      "salePrice": "$8.42",
+      "availability": [
+        "IN_STORE",
+        "CURBSIDE_PICKUP",
+        "CURBSIDE_DELIVERY"
+      ],
+      "createdDate": "2026-03-15T21:08:06.580Z"
+    }
+  ]
+}
