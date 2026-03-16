@@ -1,23 +1,44 @@
 # inflation-feed-scraper
-A scraper to grab pricing information from various retailers for specific products
 
+a nodejs scraper that collects product prices from grocery retailers on a nightly schedule, writes dated JSON exports, and uploads them to digitalocean spaces for later ingestion into a database.
 
+---
 
-```Graphql
-inflation-feed-scraper/
-├── scraper.js              ← main runner
-├── config.json             ← groups of products to track by retailer
-├── data/
-│   ├── heb/
-│   │   ├── product_export_<date>.json         ← flat output written each run
-│   ├── kroger/
-│       ├── product_export_<date>.json
-└── retailers/
-    ├── heb/
-    │   ├── index.js        ← exports a scrape() function (used by main)
-    │   └── fetchProductData.js
-    ├── kroger/
-    │   └── index.js
-    └── walmart/
-        └── index.js
+## Architecture
+
 ```
+scraper.js                  ← cron entrypoint, orchestrates all retailers
+config.json                 ← products to track, keyed by retailer name
+lib/
+  http.js                   ← generic sendRequest() utility
+  spaces.js                 ← DO Spaces upload utility (uploadFile)
+retailers/
+  <name>/
+    index.js                ← exports async scrape(config) → flat record[]
+    fetchProductData.js     ← retailer-specific fetch/transform logic
+data/
+  <retailer>/
+    product_export_<yyyy-mm-dd>.json   ← written locally on each run (gitignored)
+.github/
+  workflows/
+    deploy.yml              ← scheduled scraper run (6 AM UTC daily + workflow_dispatch)
+```
+
+the runner loads all retailers from `config.json`, calls each retailer's `scrape()`, writes a dated JSON file locally, then uploads it to DO Spaces. a planned web app will expose an ETL endpoint to ingest those exports into a database.
+
+each retailer module exports a single function:
+
+```js
+export async function scrape({ storeId, context, products }) {
+  // products: [{ productId, name }]
+  // returns: flat record[]
+}
+```
+
+To add a new retailer: create `retailers/<name>/index.js` exporting `scrape()` and add an entry to `config.json`. The runner picks it up automatically.
+
+---
+
+### To do
+- add more retailers (kroger, walmart, etc.)
+- web app ETL endpoint to ingest Spaces exports into a database
