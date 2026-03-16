@@ -15,11 +15,11 @@ inflation-feed-scraper/
 │   └── spaces.js                            ← DO Spaces upload utility (uploadFile)
 ├── retailers/
 │   └── <name>/
-│       ├── index.js                         ← exports async scrape(config) → flat record[]
+│       ├── index.js                         ← exports async scrape
 │       └── fetchProductData.js              ← retailer-specific fetch/transform logic
 ├── data/
 │   └── <retailer>/
-│       └── product_export_<yyyy-mm-dd>.json ← written locally on each run (gitignored)
+│       └── product_export_<yyyy-mm-dd>.json
 └── .github/
     └── workflows/
         └── deploy.yml                       ← scheduled scraper run (6 AM UTC daily + workflow_dispatch)
