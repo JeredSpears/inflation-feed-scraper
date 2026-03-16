@@ -6,22 +6,23 @@ a nodejs scraper that collects product prices from grocery retailers on a nightl
 
 ## Architecture
 
-```
-scraper.js                  ← cron entrypoint, orchestrates all retailers
-config.json                 ← products to track, keyed by retailer name
-lib/
-  http.js                   ← generic sendRequest() utility
-  spaces.js                 ← DO Spaces upload utility (uploadFile)
-retailers/
-  <name>/
-    index.js                ← exports async scrape(config) → flat record[]
-    fetchProductData.js     ← retailer-specific fetch/transform logic
-data/
-  <retailer>/
-    product_export_<yyyy-mm-dd>.json   ← written locally on each run (gitignored)
-.github/
-  workflows/
-    deploy.yml              ← scheduled scraper run (6 AM UTC daily + workflow_dispatch)
+```Graphql
+inflation-feed-scraper/
+├── scraper.js                               ← cron entrypoint, orchestrates all retailers
+├── config.json                              ← products to track, keyed by retailer name
+├── lib/
+│   ├── http.js                              ← generic sendRequest() utility
+│   └── spaces.js                            ← DO Spaces upload utility (uploadFile)
+├── retailers/
+│   └── <name>/
+│       ├── index.js                         ← exports async scrape(config) → flat record[]
+│       └── fetchProductData.js              ← retailer-specific fetch/transform logic
+├── data/
+│   └── <retailer>/
+│       └── product_export_<yyyy-mm-dd>.json ← written locally on each run (gitignored)
+└── .github/
+    └── workflows/
+        └── deploy.yml                       ← scheduled scraper run (6 AM UTC daily + workflow_dispatch)
 ```
 
 the runner loads all retailers from `config.json`, calls each retailer's `scrape()`, writes a dated JSON file locally, then uploads it to DO Spaces. a planned web app will expose an ETL endpoint to ingest those exports into a database.
