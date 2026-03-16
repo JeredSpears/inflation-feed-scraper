@@ -77,8 +77,6 @@ export async function fetchProductData(
       data: result.data,
     };
   }
-  //log the raw detail for debugging
-  console.log("Raw product detail:", JSON.stringify(detail, null, 2));
 
   let flattened;
   if (options.flatten && detail.__typename === "Product") {
