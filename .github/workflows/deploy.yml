@@ -1,21 +1,27 @@
-name: Deploy to Droplet
+name: Run Scraper
 
 on:
-  push:
-    branches: [main]
+  schedule:
+    - cron: '0 6 * * *'  # 6 AM UTC = midnight CST
   workflow_dispatch:
 
 jobs:
-  deploy:
+  scrape:
     runs-on: ubuntu-latest
     steps:
-      - name: Deploy to droplet via SSH
-        uses: appleboy/ssh-action@v1.0.3
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
         with:
-          host: ${{ secrets.DO_HOST }}
-          username: ${{ secrets.DO_USER }}
-          key: ${{ secrets.DO_SSH_KEY }}
-          script: |
-            cd ${{ secrets.DO_APP_PATH }}
-            git pull origin main
-            npm install
+          node-version: '22'
+
+      - run: npm install
+
+      - name: Run scraper
+        env:
+          DO_SPACES_KEY: ${{ secrets.DO_SPACES_KEY }}
+          DO_SPACES_SECRET: ${{ secrets.DO_SPACES_SECRET }}
+          DO_SPACES_BUCKET: ${{ secrets.DO_SPACES_BUCKET }}
+          DO_SPACES_REGION: ${{ secrets.DO_SPACES_REGION }}
+          DO_SPACES_ENDPOINT: ${{ secrets.DO_SPACES_ENDPOINT }}
+        run: node scraper.js
